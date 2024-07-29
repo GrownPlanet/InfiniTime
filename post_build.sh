@@ -4,7 +4,7 @@ export LANG=C.UTF-8
 set -e
 set +x
 
-export PROJECT_VERSION="1.14.1"
+export PROJECT_VERSION="1.15.0"
 
 mkdir -p "$OUTPUT_DIR"
 

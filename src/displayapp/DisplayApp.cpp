@@ -375,11 +375,11 @@ void DisplayApp::Refresh() {
         break;
       case Messages::Chime:
         LoadNewScreen(Apps::Clock, DisplayApp::FullRefreshDirections::None);
-        motorController.RunForDuration(35);
+        motorController.RingPeriodically(2);
         break;
       case Messages::OnChargingEvent:
         RestoreBrightness();
-        motorController.RunForDuration(15);
+        motorController.RunForDuration(50);
         break;
     }
   }

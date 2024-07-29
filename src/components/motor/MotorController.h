@@ -20,11 +20,14 @@ namespace Pinetime {
     private:
       static void Ring(TimerHandle_t xTimer);
       static void StopMotor(TimerHandle_t xTimer);
-      static void StopRingingPeriodically(TimerHandle_t xTimer);
+      static void _RingPeriodically(TimerHandle_t xTimer);
 
       TimerHandle_t shortVib;
       TimerHandle_t longVib;
-      TimerHandle_t stopRunningPeriodically ;
+      TimerHandle_t ringPeriodically;
+
+      uint8_t timesToRing;
+      uint8_t timesRung;
     };
   }
 }

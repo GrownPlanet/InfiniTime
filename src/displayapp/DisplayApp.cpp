@@ -270,7 +270,7 @@ void DisplayApp::Refresh() {
         } else {
           LoadNewScreen(Apps::Timer, DisplayApp::FullRefreshDirections::Up);
         }
-        motorController.RunForDuration(35);
+        motorController.RingPeriodically(3);
         break;
       case Messages::AlarmTriggered:
         if (currentApp == Apps::Alarm) {

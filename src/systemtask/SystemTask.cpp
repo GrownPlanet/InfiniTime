@@ -102,7 +102,9 @@ void SystemTask::Work() {
   watchdog.Setup(7, Drivers::Watchdog::SleepBehaviour::Run, Drivers::Watchdog::HaltBehaviour::Pause);
   watchdog.Start();
   NRF_LOG_INFO("Last reset reason : %s", Pinetime::Drivers::ResetReasonToString(watchdog.GetResetReason()));
-  APP_GPIOTE_INIT(2);
+  if (!nrfx_gpiote_is_init()) {
+    nrfx_gpiote_init();
+  }
 
   spi.Init();
   spiNorFlash.Init();
@@ -192,13 +194,15 @@ void SystemTask::Work() {
           if (!bleController.IsFirmwareUpdating()) {
             doNotGoToSleep = false;
           }
-          displayApp.PushMessage(Pinetime::Applications::Display::Messages::RestoreBrightness);
           break;
         case Messages::DisableSleeping:
           doNotGoToSleep = true;
           break;
         case Messages::GoToRunning:
-          spi.Wakeup();
+          // SPI doesn't go to sleep for always on mode
+          if (!settingsController.GetAlwaysOnDisplay()) {
+            spi.Wakeup();
+          }
 
           // Double Tap needs the touch screen to be in normal mode
           if (!settingsController.isWakeUpModeOn(Pinetime::Controllers::Settings::WakeUpMode::DoubleTap)) {
@@ -240,8 +244,6 @@ void SystemTask::Work() {
           heartRateApp.PushMessage(Pinetime::Applications::HeartRateTask::Messages::GoToSleep);
           break;
         case Messages::OnNewTime:
-          displayApp.PushMessage(Pinetime::Applications::Display::Messages::RestoreBrightness);
-          displayApp.PushMessage(Pinetime::Applications::Display::Messages::UpdateDateTime);
           if (alarmController.State() == Controllers::AlarmController::AlarmState::Set) {
             alarmController.ScheduleAlarm();
           }
@@ -250,8 +252,6 @@ void SystemTask::Work() {
           if (settingsController.GetNotificationStatus() == Pinetime::Controllers::Settings::Notification::On) {
             if (state == SystemTaskState::Sleeping) {
               GoToRunning();
-            } else {
-              displayApp.PushMessage(Pinetime::Applications::Display::Messages::RestoreBrightness);
             }
             displayApp.PushMessage(Pinetime::Applications::Display::Messages::NewNotification);
           }
@@ -263,7 +263,7 @@ void SystemTask::Work() {
           displayApp.PushMessage(Pinetime::Applications::Display::Messages::AlarmTriggered);
           break;
         case Messages::BleConnected:
-          displayApp.PushMessage(Pinetime::Applications::Display::Messages::RestoreBrightness);
+          displayApp.PushMessage(Pinetime::Applications::Display::Messages::NotifyDeviceActivity);
           isBleDiscoveryTimerRunning = true;
           bleDiscoveryTimer = 5;
           break;
@@ -323,7 +323,11 @@ void SystemTask::Work() {
             // if it's in sleep mode. Avoid bricked device by disabling sleep mode on these versions.
             spiNorFlash.Sleep();
           }
-          spi.Sleep();
+
+          // Must keep SPI awake when still updating the display for always on
+          if (!settingsController.GetAlwaysOnDisplay()) {
+            spi.Sleep();
+          }
 
           // Double Tap needs the touch screen to be in normal mode
           if (!settingsController.isWakeUpModeOn(Pinetime::Controllers::Settings::WakeUpMode::DoubleTap)) {
@@ -457,7 +461,7 @@ void SystemTask::HandleButtonAction(Controllers::ButtonActions action) {
     return;
   }
 
-  displayApp.PushMessage(Pinetime::Applications::Display::Messages::RestoreBrightness);
+  displayApp.PushMessage(Pinetime::Applications::Display::Messages::NotifyDeviceActivity);
 
   using Actions = Controllers::ButtonActions;
 

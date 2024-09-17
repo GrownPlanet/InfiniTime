@@ -53,14 +53,14 @@ WatchFaceDigital::WatchFaceDigital(Controllers::DateTime& dateTimeController,
 
   label_time = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(label_time, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_extrabold_compressed);
-  lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, -70);
+  lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, -20);
 
   bar_seconds = lv_bar_create(lv_scr_act(), nullptr);
   lv_obj_set_size(bar_seconds, 200, 20);
   lv_obj_align(bar_seconds, lv_scr_act(), LV_ALIGN_CENTER, 0, 30);
 
   label_date = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_CENTER, 0, 50);
+  lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_CENTER, 0, 55);
   lv_obj_set_style_local_text_color(label_date, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
 
   label_time_ampm = lv_label_create(lv_scr_act(), nullptr);
@@ -126,7 +126,7 @@ void WatchFaceDigital::Refresh() {
       lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
     } else {
       lv_label_set_text_fmt(label_time, "%02d:%02d", hour, minute);
-      lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
+      lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, -20);
     }
 
     lv_bar_set_value(bar_seconds, (int)(100. - (float)seconds * (5./3.)), LV_ANIM_OFF);

@@ -27,40 +27,44 @@ WatchFaceTerminal::WatchFaceTerminal(Controllers::DateTime& dateTimeController,
     settingsController {settingsController},
     heartRateController {heartRateController},
     motionController {motionController} {
-  batteryValue = lv_label_create(lv_scr_act(), nullptr);
-  lv_label_set_recolor(batteryValue, true);
-  lv_obj_align(batteryValue, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, -20);
-
-  connectState = lv_label_create(lv_scr_act(), nullptr);
-  lv_label_set_recolor(connectState, true);
-  lv_obj_align(connectState, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 40);
-
   notificationIcon = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_align(notificationIcon, nullptr, LV_ALIGN_IN_LEFT_MID, 0, -100);
 
-  label_date = lv_label_create(lv_scr_act(), nullptr);
-  lv_label_set_recolor(label_date, true);
-  lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, -40);
+  labelPrompt1 = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_align(labelPrompt1, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, -80);
+  lv_label_set_text_static(labelPrompt1, "timod@watch:~$ now");
 
-  label_prompt_1 = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_align(label_prompt_1, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, -80);
-  lv_label_set_text_static(label_prompt_1, "user@watch:~ $ now");
+  labelTime = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_recolor(labelTime, true);
+  lv_obj_align(labelTime, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, -60);
 
-  label_prompt_2 = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_align(label_prompt_2, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 60);
-  lv_label_set_text_static(label_prompt_2, "user@watch:~ $");
+  labelDate = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_recolor(labelDate, true);
+  lv_obj_align(labelDate, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, -40);
 
-  label_time = lv_label_create(lv_scr_act(), nullptr);
-  lv_label_set_recolor(label_time, true);
-  lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, -60);
+  labelDay = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_recolor(labelDay, true);
+  lv_obj_align(labelDay, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, -20);
 
-  heartbeatValue = lv_label_create(lv_scr_act(), nullptr);
-  lv_label_set_recolor(heartbeatValue, true);
-  lv_obj_align(heartbeatValue, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 20);
+  batteryValue = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_recolor(batteryValue, true);
+  lv_obj_align(batteryValue, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 0);
 
   stepValue = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_recolor(stepValue, true);
-  lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 0);
+  lv_obj_align(stepValue, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 20);
+
+  heartbeatValue = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_recolor(heartbeatValue, true);
+  lv_obj_align(heartbeatValue, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 40);
+
+  connectState = lv_label_create(lv_scr_act(), nullptr);
+  lv_label_set_recolor(connectState, true);
+  lv_obj_align(connectState, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 60);
+
+  labelPrompt2 = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_align(labelPrompt2, lv_scr_act(), LV_ALIGN_IN_LEFT_MID, 0, 80);
+  lv_label_set_text_static(labelPrompt2, "timod@watch:~$");
 
   taskRefresh = lv_task_create(RefreshTaskCallback, LV_DISP_DEF_REFR_PERIOD, LV_TASK_PRIO_MID, this);
   Refresh();
@@ -98,7 +102,7 @@ void WatchFaceTerminal::Refresh() {
   notificationState = notificationManager.AreNewNotificationsAvailable();
   if (notificationState.IsUpdated()) {
     if (notificationState.Get()) {
-      lv_label_set_text_static(notificationIcon, "You have mail.");
+      lv_label_set_text_static(notificationIcon, "new notifications");
     } else {
       lv_label_set_text_static(notificationIcon, "");
     }
@@ -120,9 +124,9 @@ void WatchFaceTerminal::Refresh() {
         hour = hour - 12;
         ampmChar[0] = 'P';
       }
-      lv_label_set_text_fmt(label_time, "[TIME]#11cc55 %02d:%02d:%02d %s#", hour, minute, second, ampmChar);
+      lv_label_set_text_fmt(labelTime, "[TIME]#11cc55 %02d:%02d:%02d %s#", hour, minute, second, ampmChar);
     } else {
-      lv_label_set_text_fmt(label_time, "[TIME]#11cc55 %02d:%02d:%02d", hour, minute, second);
+      lv_label_set_text_fmt(labelTime, "[TIME]#11cc55 %02d:%02d:%02d", hour, minute, second);
     }
 
     currentDate = std::chrono::time_point_cast<std::chrono::days>(currentDateTime.Get());
@@ -130,7 +134,9 @@ void WatchFaceTerminal::Refresh() {
       uint16_t year = dateTimeController.Year();
       Controllers::DateTime::Months month = dateTimeController.Month();
       uint8_t day = dateTimeController.Day();
-      lv_label_set_text_fmt(label_date, "[DATE]#007fff %04d-%02d-%02d#", short(year), char(month), char(day));
+
+      lv_label_set_text_fmt(labelDate, "[DATE]#007fff %02d-%02d-%04d#", char(day), char(month), short(year));
+      lv_label_set_text_fmt(labelDay, "[DAY ]#cb3e1f %s", dateTimeController.DayOfWeekLongToString());
     }
   }
 

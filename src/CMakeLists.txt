@@ -366,8 +366,6 @@ list(APPEND SOURCE_FILES
         displayapp/DisplayApp.cpp
         displayapp/screens/Screen.cpp
         displayapp/screens/Tile.cpp
-        displayapp/screens/InfiniPaint.cpp
-        displayapp/screens/Paddle.cpp
         displayapp/screens/StopWatch.cpp
         displayapp/screens/BatteryIcon.cpp
         displayapp/screens/BleIcon.cpp
@@ -384,7 +382,6 @@ list(APPEND SOURCE_FILES
         displayapp/screens/FirmwareValidation.cpp
         displayapp/screens/ApplicationList.cpp
         displayapp/screens/Notifications.cpp
-        displayapp/screens/Twos.cpp
         displayapp/screens/HeartRate.cpp
         displayapp/screens/FlashLight.cpp
         displayapp/screens/List.cpp
@@ -593,9 +590,7 @@ set(INCLUDE_FILES
         displayapp/TouchEvents.h
         displayapp/screens/Screen.h
         displayapp/screens/Tile.h
-        displayapp/screens/InfiniPaint.h
         displayapp/screens/StopWatch.h
-        displayapp/screens/Paddle.h
         displayapp/screens/BatteryIcon.h
         displayapp/screens/BleIcon.h
         displayapp/screens/NotificationIcon.h

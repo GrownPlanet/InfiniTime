@@ -370,7 +370,8 @@ void DisplayApp::Refresh() {
         } else {
           LoadNewScreen(Apps::Timer, DisplayApp::FullRefreshDirections::Up);
         }
-        motorController.RunForDuration(35);
+        // play duration, pause duration, repeat
+        motorController.RingForDuration(35, 500, 3);
         break;
       case Messages::AlarmTriggered:
         if (currentApp == Apps::Alarm) {

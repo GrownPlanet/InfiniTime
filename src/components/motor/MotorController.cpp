@@ -24,6 +24,13 @@ void MotorController::RunForDuration(uint8_t motorDuration) {
   }
 }
 
+void MotorController::RingForDuration(uint8_t motorOnDuration, uint16_t motorOffDuration, uint8_t times) {
+  for (int i = 0; i < times; i++) {
+    RunForDuration(motorOnDuration);
+    vTaskDelay(pdMS_TO_TICKS(motorOffDuration + motorOnDuration));
+  }
+}
+
 void MotorController::StartRinging() {
   RunForDuration(50);
   xTimerStart(longVib, 0);
@@ -37,3 +44,4 @@ void MotorController::StopRinging() {
 void MotorController::StopMotor(TimerHandle_t /*xTimer*/) {
   nrf_gpio_pin_set(PinMap::Motor);
 }
+

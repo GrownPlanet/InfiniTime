@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source .venv/bin/activate
+
 mkdir build
 cd build
 

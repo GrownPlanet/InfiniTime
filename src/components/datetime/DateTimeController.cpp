@@ -7,12 +7,11 @@
 using namespace Pinetime::Controllers;
 
 namespace {
-  constexpr const char* const DaysStringShort[] = {"--", "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
-  constexpr const char* const DaysStringLong[] = {"--", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"};
-  constexpr const char* const DaysStringShortLow[] = {"--", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-  constexpr const char* const MonthsString[] = {"--", "JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
-  constexpr const char* const MonthsStringLow[] =
-    {"--", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+  constexpr const char* const DaysStringShort[] = {"--", "MA", "DI", "WO", "DO", "VR", "ZA", "ZO"};
+  constexpr const char* const DaysStringLong[] = {"--", "MAANDAG", "DINSDAG", "WOENSDAG", "DONDERDAG", "VRIJDAG", "ZATERDAG", "ZONDAG"};
+  constexpr const char* const DaysStringShortLow[] = {"--", "Ma", "Di", "Wo", "Do", "Vr", "Za", "Zo"};
+  constexpr const char* const MonthsString[] = {"--", "JAN", "FEB", "MAA", "APR", "MEI", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"};
+  constexpr const char* const MonthsStringLow[] = {"--", "Jan", "Feb", "Maa", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
   constexpr int compileTimeAtoi(const char* str) {
     int result = 0;

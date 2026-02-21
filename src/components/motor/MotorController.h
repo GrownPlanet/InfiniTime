@@ -13,7 +13,6 @@ namespace Pinetime {
 
       void Init();
       void RunForDuration(uint8_t motorDuration);
-      void RingForDuration(uint8_t motorOnDuration, uint16_t motorOffDuration, uint8_t times);
       void StartRinging();
       void StopRinging();
       bool IsRinging();
@@ -23,9 +22,6 @@ namespace Pinetime {
       static void StopMotor(TimerHandle_t xTimer);
       TimerHandle_t shortVib;
       TimerHandle_t longVib;
-      uint8_t ringCount = 0;
-      uint8_t motorOnDuration = 0;
-      uint8_t motorOffDuration = 0;
     };
   }
 }

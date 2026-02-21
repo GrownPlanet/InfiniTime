@@ -55,6 +55,7 @@ namespace Pinetime {
         lv_obj_t* labelPrompt1;
         lv_obj_t* labelTime;
         lv_obj_t* labelDate;
+        lv_obj_t* labelDay;
         lv_obj_t* batteryValue;
         lv_obj_t* stepValue;
         lv_obj_t* heartbeatValue;

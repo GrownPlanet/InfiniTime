@@ -45,22 +45,25 @@ WatchFaceDigital::WatchFaceDigital(Controllers::DateTime& dateTimeController,
   lv_obj_set_style_local_text_color(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
   lv_obj_set_style_local_text_font(weatherIcon, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &fontawesome_weathericons);
   lv_label_set_text(weatherIcon, "");
-  lv_obj_align(weatherIcon, nullptr, LV_ALIGN_IN_TOP_MID, -20, 50);
+  lv_obj_align(weatherIcon, nullptr, LV_ALIGN_CENTER, -20, -70);
   lv_obj_set_auto_realign(weatherIcon, true);
 
   temperature = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_color(temperature, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
   lv_label_set_text(temperature, "");
-  lv_obj_align(temperature, nullptr, LV_ALIGN_IN_TOP_MID, 20, 50);
-
-  label_date = lv_label_create(lv_scr_act(), nullptr);
-  lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_CENTER, 0, 60);
-  lv_obj_set_style_local_text_color(label_date, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
+  lv_obj_align(temperature, nullptr, LV_ALIGN_CENTER, 20, -70);
 
   label_time = lv_label_create(lv_scr_act(), nullptr);
   lv_obj_set_style_local_text_font(label_time, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, &jetbrains_mono_extrabold_compressed);
+  lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, -20);
 
-  lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
+  bar_seconds = lv_bar_create(lv_scr_act(), nullptr);
+  lv_obj_set_size(bar_seconds, 200, 20);
+  lv_obj_align(bar_seconds, lv_scr_act(), LV_ALIGN_CENTER, 0, 30);
+
+  label_date = lv_label_create(lv_scr_act(), nullptr);
+  lv_obj_align(label_date, lv_scr_act(), LV_ALIGN_CENTER, 0, 55);
+  lv_obj_set_style_local_text_color(label_date, LV_LABEL_PART_MAIN, LV_STATE_DEFAULT, lv_color_hex(0x999999));
 
   label_time_ampm = lv_label_create(lv_scr_act(), nullptr);
   lv_label_set_text_static(label_time_ampm, "");
@@ -103,11 +106,12 @@ void WatchFaceDigital::Refresh() {
     lv_label_set_text_static(notificationIcon, NotificationIcon::GetIcon(notificationState.Get()));
   }
 
-  currentDateTime = std::chrono::time_point_cast<std::chrono::minutes>(dateTimeController.CurrentDateTime());
+  currentDateTime = std::chrono::time_point_cast<std::chrono::seconds>(dateTimeController.CurrentDateTime());
 
   if (currentDateTime.IsUpdated()) {
     uint8_t hour = dateTimeController.Hours();
     uint8_t minute = dateTimeController.Minutes();
+    uint8_t seconds = dateTimeController.Seconds();
 
     if (settingsController.GetClockType() == Controllers::Settings::ClockType::H12) {
       char ampmChar[3] = "AM";
@@ -124,28 +128,24 @@ void WatchFaceDigital::Refresh() {
       lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_IN_RIGHT_MID, 0, 0);
     } else {
       lv_label_set_text_fmt(label_time, "%02d:%02d", hour, minute);
-      lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, 0);
+      lv_obj_align(label_time, lv_scr_act(), LV_ALIGN_CENTER, 0, -20);
     }
+
+    lv_bar_set_value(bar_seconds, (int)(100. - (float)seconds * (5./3.)), LV_ANIM_OFF);
 
     currentDate = std::chrono::time_point_cast<std::chrono::days>(currentDateTime.Get());
     if (currentDate.IsUpdated()) {
-      uint16_t year = dateTimeController.Year();
       uint8_t day = dateTimeController.Day();
-      if (settingsController.GetClockType() == Controllers::Settings::ClockType::H24) {
-        lv_label_set_text_fmt(label_date,
-                              "%s %d %s %d",
-                              dateTimeController.DayOfWeekShortToString(),
-                              day,
-                              dateTimeController.MonthShortToString(),
-                              year);
-      } else {
-        lv_label_set_text_fmt(label_date,
-                              "%s %s %d %d",
-                              dateTimeController.DayOfWeekShortToString(),
-                              dateTimeController.MonthShortToString(),
-                              day,
-                              year);
-      }
+      Controllers::DateTime::Months month = dateTimeController.Month();
+      uint16_t year = dateTimeController.Year();
+
+      lv_label_set_text_fmt(label_date,
+                            "%s %02d/%02d/%d",
+                            dateTimeController.DayOfWeekShortToString(),
+                            char(day),
+                            char(month),
+                            year);
+
       lv_obj_realign(label_date);
     }
   }

@@ -49,6 +49,9 @@ WatchFaceTerminal::WatchFaceTerminal(Controllers::DateTime& dateTimeController,
   labelDate = lv_label_create(container, nullptr);
   lv_label_set_recolor(labelDate, true);
 
+  labelDay = lv_label_create(container, nullptr);
+  lv_label_set_recolor(labelDay, true);
+
   batteryValue = lv_label_create(container, nullptr);
   lv_label_set_recolor(batteryValue, true);
 
@@ -116,7 +119,9 @@ void WatchFaceTerminal::Refresh() {
       uint16_t year = dateTimeController.Year();
       Controllers::DateTime::Months month = dateTimeController.Month();
       uint8_t day = dateTimeController.Day();
+
       lv_label_set_text_fmt(labelDate, "#ffffff [DATE]# #007fff %04d-%02d-%02d#", year, month, day);
+      lv_label_set_text_fmt(labelDay, "#ffffff [DAY ]# #cb3e1f %s#", dateTimeController.DayOfWeekLongToString());
     }
   }
 

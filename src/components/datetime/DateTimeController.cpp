@@ -8,6 +8,7 @@ using namespace Pinetime::Controllers;
 
 namespace {
   constexpr const char* const DaysStringShort[] = {"--", "MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"};
+  constexpr const char* const DaysStringLong[] = {"--", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"};
   constexpr const char* const DaysStringShortLow[] = {"--", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
   constexpr const char* const DaysString[] = {"--", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY"};
   constexpr const char* const DaysStringLow[] = {"--", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
@@ -148,6 +149,10 @@ const char* DateTime::DayOfWeekShortToString() const {
 
 const char* DateTime::DayOfWeekToString() const {
   return DaysString[static_cast<uint8_t>(DayOfWeek())];
+}
+
+const char* DateTime::DayOfWeekLongToString() const {
+  return DaysStringLong[static_cast<uint8_t>(DayOfWeek())];
 }
 
 const char* DateTime::MonthShortToStringLow(Months month) {

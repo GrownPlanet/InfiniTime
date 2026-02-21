@@ -379,6 +379,8 @@ void DisplayApp::Refresh() {
           auto* timerScreen = static_cast<Screens::Timer*>(currentScreen.get());
           timerScreen->SetTimerRinging();
         }
+        // play duration, pause duration, repeat
+        motorController.RingForDuration(35, 500, 3);
         break;
       }
       case Messages::AlarmTriggered:
